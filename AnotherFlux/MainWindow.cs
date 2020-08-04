@@ -1,179 +1,195 @@
 ﻿using System;
 using Gtk;
 
-public partial class MainWindow : Window
+namespace AnotherFlux
 {
-    public MainWindow() : base("Another Flux")
+    public partial class MainWindow : Window
     {
-        DeleteEvent += delegate { Application.Quit(); };
+        public MainWindow() : this(new Builder("AnotherFlux.ui.Main.glade")) { }
 
-        MenuBar mainMenu = new MenuBar();
+        private MainWindow(Builder builder) : base(builder.GetObject("MainWindow").Handle)
+        {
+            builder.Autoconnect(this);
 
-        Menu fileMenu = new Menu();
-        AccelGroup fileAgr = new AccelGroup();
-        AddAccelGroup(fileAgr);
-        MenuItem file = new MenuItem("File");
-        file.Submenu = fileMenu;
+            DeleteEvent += OnExit;
 
-        MenuItem open = new MenuItem("Open");
-        open.AddAccelerator("activate", fileAgr,
-            new AccelKey(Gdk.Key.o, Gdk.ModifierType.ControlMask, AccelFlags.Visible));
-        open.Activated += OnOpen;
-        fileMenu.Append(open);
+            ShowAll();
+        }
 
-        MenuItem save = new MenuItem("Save");
-        save.AddAccelerator("activate", fileAgr,
-            new AccelKey(Gdk.Key.s, Gdk.ModifierType.ControlMask | Gdk.ModifierType.ShiftMask, AccelFlags.Visible));
-        save.Activated += OnSave;
-        fileMenu.Append(save);
+        /*
+        public MainWindow() : base("Another Flux")
+        {
+            DeleteEvent += delegate { Application.Quit(); };
 
-        MenuItem saveAs = new MenuItem("Save as...");
-        saveAs.Activated += OnSaveAs;
-        fileMenu.Append(saveAs);
+            MenuBar mainMenu = new MenuBar();
 
-        MenuItem autoArchive = new MenuItem("Auto-Archive");
-        autoArchive.Activated += OnAutoArchive;
-        fileMenu.Append(autoArchive);
+            Menu fileMenu = new Menu();
+            AccelGroup fileAgr = new AccelGroup();
+            AddAccelGroup(fileAgr);
+            MenuItem file = new MenuItem("File");
+            file.Submenu = fileMenu;
 
-        MenuItem markModified = new MenuItem("Mark All Modified");
-        markModified.Activated += OnMarkModified;
-        fileMenu.Append(markModified);
+            MenuItem open = new MenuItem("Open");
+            open.AddAccelerator("activate", fileAgr,
+                new AccelKey(Gdk.Key.o, Gdk.ModifierType.ControlMask, AccelFlags.Visible));
+            open.Activated += OnOpen;
+            fileMenu.Append(open);
 
-        fileMenu.Append(new SeparatorMenuItem());
+            MenuItem save = new MenuItem("Save");
+            save.AddAccelerator("activate", fileAgr,
+                new AccelKey(Gdk.Key.s, Gdk.ModifierType.ControlMask | Gdk.ModifierType.ShiftMask, AccelFlags.Visible));
+            save.Activated += OnSave;
+            fileMenu.Append(save);
 
-        MenuItem compression = new MenuItem("Compression...");
-        compression.Activated += OnCompression;
-        fileMenu.Append(compression);
+            MenuItem saveAs = new MenuItem("Save as...");
+            saveAs.Activated += OnSaveAs;
+            fileMenu.Append(saveAs);
 
-        MenuItem export = new MenuItem("Export...");
-        export.Activated += OnExport;
-        fileMenu.Append(export);
+            MenuItem autoArchive = new MenuItem("Auto-Archive");
+            autoArchive.Activated += OnAutoArchive;
+            fileMenu.Append(autoArchive);
 
-        MenuItem import = new MenuItem("Import...");
-        import.Activated += OnImport;
-        fileMenu.Append(import);
+            MenuItem markModified = new MenuItem("Mark All Modified");
+            markModified.Activated += OnMarkModified;
+            fileMenu.Append(markModified);
 
-        // Patches >
-        // > Expand ROM
-        // > All Overworlds have a NLZ
-        // > Dactyl NLZ is not origin based
-        // > Startup Location
-        // > Beta Events
+            fileMenu.Append(new SeparatorMenuItem());
 
-        fileMenu.Append(new SeparatorMenuItem());
+            MenuItem compression = new MenuItem("Compression...");
+            compression.Activated += OnCompression;
+            fileMenu.Append(compression);
 
-        MenuItem exit = new MenuItem("Exit");
-        exit.AddAccelerator("activate", fileAgr,
-            new AccelKey(Gdk.Key.F4, Gdk.ModifierType.MetaMask, AccelFlags.Visible));
-        exit.Activated += OnExit;
-        fileMenu.Append(exit);
+            MenuItem export = new MenuItem("Export...");
+            export.Activated += OnExport;
+            fileMenu.Append(export);
 
-        mainMenu.Append(file);
+            MenuItem import = new MenuItem("Import...");
+            import.Activated += OnImport;
+            fileMenu.Append(import);
 
-        Menu windowMenu = new Menu();
-        AccelGroup windowAgr = new AccelGroup();
-        AddAccelGroup(windowAgr);
-        MenuItem window = new MenuItem("Window");
-        window.Submenu = windowMenu;
+            // Patches >
+            // > Expand ROM
+            // > All Overworlds have a NLZ
+            // > Dactyl NLZ is not origin based
+            // > Startup Location
+            // > Beta Events
 
-        mainMenu.Append(window);
+            fileMenu.Append(new SeparatorMenuItem());
 
-        Menu pluginsMenu = new Menu();
-        AccelGroup pluginsAgr = new AccelGroup();
-        AddAccelGroup(pluginsAgr);
-        MenuItem plugins = new MenuItem("Plugins");
-        plugins.Submenu = pluginsMenu;
+            MenuItem exit = new MenuItem("Exit");
+            exit.AddAccelerator("activate", fileAgr,
+                new AccelKey(Gdk.Key.F4, Gdk.ModifierType.MetaMask, AccelFlags.Visible));
+            exit.Activated += OnExit;
+            fileMenu.Append(exit);
 
-        mainMenu.Append(plugins);
+            mainMenu.Append(file);
 
-        Menu helpMenu = new Menu();
-        AccelGroup helpAgr = new AccelGroup();
-        AddAccelGroup(helpAgr);
-        MenuItem help = new MenuItem("Help");
-        help.Submenu = helpMenu;
+            Menu windowMenu = new Menu();
+            AccelGroup windowAgr = new AccelGroup();
+            AddAccelGroup(windowAgr);
+            MenuItem window = new MenuItem("Window");
+            window.Submenu = windowMenu;
 
-        MenuItem manual = new MenuItem("Manual");
-        manual.AddAccelerator("activate", fileAgr,
-            new AccelKey(Gdk.Key.F1, Gdk.ModifierType.None, AccelFlags.Visible));
-        manual.Activated += OnManual;
-        helpMenu.Append(manual);
+            mainMenu.Append(window);
 
-        MenuItem ack = new MenuItem("Acknowledgements");
-        ack.Activated += OnAck;
-        helpMenu.Append(ack);
+            Menu pluginsMenu = new Menu();
+            AccelGroup pluginsAgr = new AccelGroup();
+            AddAccelGroup(pluginsAgr);
+            MenuItem plugins = new MenuItem("Plugins");
+            plugins.Submenu = pluginsMenu;
 
-        MenuItem about = new MenuItem("About...");
-        about.Activated += OnAbout;
-        helpMenu.Append(about);
+            mainMenu.Append(plugins);
 
-        mainMenu.Append(help);
+            Menu helpMenu = new Menu();
+            AccelGroup helpAgr = new AccelGroup();
+            AddAccelGroup(helpAgr);
+            MenuItem help = new MenuItem("Help");
+            help.Submenu = helpMenu;
 
-        VBox vbox = new VBox(false, 2);
-        vbox.PackStart(mainMenu, false, false, 0);
-        vbox.PackStart(new Label(), false, false, 0);
+            MenuItem manual = new MenuItem("Manual");
+            manual.AddAccelerator("activate", fileAgr,
+                new AccelKey(Gdk.Key.F1, Gdk.ModifierType.None, AccelFlags.Visible));
+            manual.Activated += OnManual;
+            helpMenu.Append(manual);
 
-        Add(vbox);
+            MenuItem ack = new MenuItem("Acknowledgements");
+            ack.Activated += OnAck;
+            helpMenu.Append(ack);
 
-        ShowAll();
-    }
+            MenuItem about = new MenuItem("About...");
+            about.Activated += OnAbout;
+            helpMenu.Append(about);
 
-    private void OnOpen(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+            mainMenu.Append(help);
 
-    private void OnSave(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+            VBox vbox = new VBox(false, 2);
+            vbox.PackStart(mainMenu, false, false, 0);
+            vbox.PackStart(new Label(), false, false, 0);
 
-    private void OnSaveAs(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+            Add(vbox);
 
-    private void OnAutoArchive(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+            ShowAll();
+        }
+        */
 
-    private void OnMarkModified(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+        private void OnOpen(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-    private void OnCompression(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+        private void OnSave(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-    private void OnExport(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+        private void OnSaveAs(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-    private void OnImport(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+        private void OnAutoArchive(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-    private void OnExit(object sender, EventArgs e)
-    {
-        Application.Quit();
-    }
+        private void OnMarkModified(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-    private void OnManual(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+        private void OnCompression(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-    private void OnAck(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+        private void OnExport(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-    private void OnAbout(object sender, EventArgs e)
-    {
-        throw new NotImplementedException();
+        private void OnImport(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnExit(object sender, EventArgs e)
+        {
+            Application.Quit();
+        }
+
+        private void OnManual(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnAck(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnAbout(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
