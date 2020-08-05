@@ -1,8 +1,6 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherFlux", "AnotherFlux\AnotherFlux.csproj", "{2737B19A-4A51-4DCE-8520-67AA0C641FC5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxShared", "FluxShared\FluxShared.csproj", "{0E3FBB77-F0A3-4535-8BD1-088352774A34}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSVRender", "PSVRender\PSVRender.csproj", "{C53226AC-1595-4DC4-B32E-353B2F0EEA32}"
@@ -15,10 +13,6 @@ Global
 		Release|anycpu = Release|anycpu
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2737B19A-4A51-4DCE-8520-67AA0C641FC5}.Debug|anycpu.ActiveCfg = Debug|anycpu
-		{2737B19A-4A51-4DCE-8520-67AA0C641FC5}.Debug|anycpu.Build.0 = Debug|anycpu
-		{2737B19A-4A51-4DCE-8520-67AA0C641FC5}.Release|anycpu.ActiveCfg = Release|anycpu
-		{2737B19A-4A51-4DCE-8520-67AA0C641FC5}.Release|anycpu.Build.0 = Release|anycpu
 		{0E3FBB77-F0A3-4535-8BD1-088352774A34}.Debug|anycpu.ActiveCfg = Debug|Any CPU
 		{0E3FBB77-F0A3-4535-8BD1-088352774A34}.Debug|anycpu.Build.0 = Debug|Any CPU
 		{0E3FBB77-F0A3-4535-8BD1-088352774A34}.Release|anycpu.ActiveCfg = Release|Any CPU
