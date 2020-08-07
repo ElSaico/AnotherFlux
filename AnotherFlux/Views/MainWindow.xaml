@@ -6,12 +6,47 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AnotherFlux.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AnotherFlux">
+        Title="Another Flux">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open..."/>
+                <MenuItem Header="_Save"/>
+                <MenuItem Header="Save as..."/>
+                <MenuItem Header="Auto-Archive"/>
+                <MenuItem Header="Mark All Modified"/>
+                <Separator/>
+                <MenuItem Header="Compression..."/>
+                <MenuItem Header="Export..."/>
+                <MenuItem Header="Import..."/>
+                <MenuItem Header="Patches">
+                    <MenuItem Header="Expand ROM"/>
+                    <MenuItem Header="All Overworlds have a NLZ"/>
+                    <MenuItem Header="Dactyl NLZ is not origin based"/>
+                    <MenuItem Header="Startup Location"/>
+                    <MenuItem Header="Beta Events"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Exit"/>
+            </MenuItem>
+            <MenuItem Header="_Window">
+            </MenuItem>
+            <MenuItem Header="_Plugins">
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="Manual"/> <!-- F1 -->
+                <MenuItem Header="Acknowledgements"/>
+                <MenuItem Header="About..."/>
+            </MenuItem>
+        </Menu>
+        <TabControl>
+        </TabControl>
+        <ItemsControl DockPanel.Dock="Bottom">
+        </ItemsControl>
+    </DockPanel>
 </Window>
