@@ -4,6 +4,8 @@ namespace FluxShared
 {
 	public class SaveRecord
 	{
+		private const ushort MAX_POINTERS = 256;
+
 		public delegate void GetDel();
 		public delegate bool SaveDel();
 		public delegate bool ClaimDel();
@@ -20,8 +22,52 @@ namespace FluxShared
 		public bool bOverride;
 
 		public ushort nPointers;
-		public PointerRecord[] Pointer { get; set; }
-		public PointerType nPointerType { get; set; }
+		private PointerRecord[] pointer = new PointerRecord[MAX_POINTERS];
+		public PointerRecord[] Pointer {
+			get => pointer;
+			set {
+				nPointers = (ushort)value.Length;
+				pointer = value;
+			}
+		}
+		private PointerType pointerType;
+		public PointerType nPointerType {
+			get => pointerType;
+			set {
+				pointerType = value;
+				switch (pointerType)
+				{
+				case PointerType.SizedByAddress:
+					RecGet = SizedByAddressGet;
+					RecSave = SizedByAddressSave;
+					RecClaim = SizedByAddressClaim;
+					RecSize = SizedByAddressSize;
+					RecReseat = SimpleReseat;
+					RecImport = SizedByAddressImport;
+					RecExport = SizedByAddressExport;
+					break;
+				case PointerType.OWExit:
+					RecGet = OWExitGet;
+					RecSave = SimpleSave;
+					RecClaim = SimpleClaim;
+					RecSize = OWExitSize;
+					RecReseat = SimpleReseat;
+					RecWriteText = OWExitWriteText;
+					RecImport = OWExitImport;
+					RecExport = OWExitExport;
+					break;
+				default:
+					RecGet = SimpleGet;
+					RecSave = SimpleSave;
+					RecClaim = SimpleClaim;
+					RecSize = SimpleSize;
+					RecReseat = SimpleReseat;
+					RecImport = SimpleImport;
+					RecExport = SimpleExport;
+					break;
+				}
+			}
+		}
 
 		public uint nMaxSize = 65536u;
 		public uint nRecords = 1u;
@@ -42,13 +88,48 @@ namespace FluxShared
 		protected WriteTextDel RecWriteText;
 		protected ReseatDel RecReseat;
 
-		public SaveRecord() { }
+		public SaveRecord() {
+			nPointerType = PointerType.Simple;
+		 }
 
-		public ushort CommonPointers(SaveRecord Rec) { }
+		public ushort CommonPointers(SaveRecord Rec)
+		{
+			ushort count = 0;
+			for (int i = 0; i < nPointers; i++)
+			{
+				for (int j = 0; j < Rec.nPointers; j++)
+				{
+					if (Pointer[i].Equals(Rec.Pointer[j]))
+					{
+						count += 1;
+					}
+				}
+			}
+			return count;
+		}
 
-		public void MergePointers(SaveRecord Rec) { }
+		public void MergePointers(SaveRecord Rec)
+		{
+			if (nPointers == MAX_POINTERS) return;
 
-		public void Get() { }
+			for (int i = 0; i < Rec.nPointers; i++)
+			{
+				int j;
+				for (j = 0; j < nPointers && !Pointer[j].Equals(Rec.Pointer[i]); j++) { }
+				if (j == nPointers)
+				{
+					Pointer[nPointers] = new PointerRecord();
+					Pointer[nPointers].SetData(Rec.Pointer[i]);
+					nPointers++;
+				}
+				if (nPointers == MAX_POINTERS)
+				{
+					break;
+				}
+			}
+		}
+
+		public void Get() => RecGet();
 
 		public bool Save() { }
 
