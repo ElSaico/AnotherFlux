@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AnotherFlux.ViewModels
+namespace AnotherFlux.Views.Models
 {
     public class MainWindowViewModel : ViewModelBase
     {
