@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Models\" />
+    <Folder Include="Views.Models\" />
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
@@ -18,5 +19,10 @@
     <PackageReference Include="Avalonia" Version="0.9.12" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.12" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.12" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FluxShared\FluxShared.csproj" />
+    <ProjectReference Include="..\PSVRender\PSVRender.csproj" />
+    <ProjectReference Include="..\GGRLib\GGRLib.csproj" />
   </ItemGroup>
 </Project>

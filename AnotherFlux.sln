@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSVRender", "PSVRender\PSVR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GGRLib", "GGRLib\GGRLib.csproj", "{0BFAE5AD-335A-41DF-8FD4-1284745D0F48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherFlux", "AnotherFlux\AnotherFlux.csproj", "{851A466F-1A2F-44D2-90EF-D6090E28C126}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|anycpu = Debug|anycpu
@@ -25,5 +27,9 @@ Global
 		{0BFAE5AD-335A-41DF-8FD4-1284745D0F48}.Debug|anycpu.Build.0 = Debug|Any CPU
 		{0BFAE5AD-335A-41DF-8FD4-1284745D0F48}.Release|anycpu.ActiveCfg = Release|Any CPU
 		{0BFAE5AD-335A-41DF-8FD4-1284745D0F48}.Release|anycpu.Build.0 = Release|Any CPU
+		{851A466F-1A2F-44D2-90EF-D6090E28C126}.Debug|anycpu.ActiveCfg = Debug|Any CPU
+		{851A466F-1A2F-44D2-90EF-D6090E28C126}.Debug|anycpu.Build.0 = Debug|Any CPU
+		{851A466F-1A2F-44D2-90EF-D6090E28C126}.Release|anycpu.ActiveCfg = Release|Any CPU
+		{851A466F-1A2F-44D2-90EF-D6090E28C126}.Release|anycpu.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
