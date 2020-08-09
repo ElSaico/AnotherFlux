@@ -133,12 +133,9 @@ namespace AnotherFlux.Models
             patchStartLocation = romType == RomType.Beta || rawData[0x2E1A] != 0x20;
             patchBetaEvents = romType == RomType.Beta && rawData[0x372012] != 0xA7;
 
-            locationMaps = new SaveRecord[256];
-            GetSimpleRec(locationMaps, 0x6006, RomAddr.LocMap);
-            locationTileAssemblyL12 = new SaveRecord[87];
-            GetSimpleRec(locationTileAssemblyL12, 0x1000, RomAddr.LocTileAsmL12);
-            locationTileAssemblyL3 = new SaveRecord[23];
-            GetSimpleRec(locationTileAssemblyL3, 0x1000, RomAddr.LocTileAsmL3);
+            locationMaps = GetSaveRecords(256, 0x6006, RomAddr.LocMap);
+            locationTileAssemblyL12 = GetSaveRecords(87, 0x1000, RomAddr.LocTileAsmL12);
+            locationTileAssemblyL3 = GetSaveRecords(23, 0x1000, RomAddr.LocTileAsmL3);
 
             locationExits = new SaveRecord
             {
@@ -149,34 +146,38 @@ namespace AnotherFlux.Models
             };
             if (romType != RomType.USA)
             {
-                locationExits.Pointer = new PointerRecord[12];
-                locationExits.Pointer[0] = new PointerRecord(GlobalShared.GetRomAddr(RomAddr.LocExit));
-                locationExits.Pointer[1] = new PointerRecord(0x9CD6L, 0, true, false);
-                locationExits.Pointer[2] = new PointerRecord(0x9CDEL, 0, true, false);
-                locationExits.Pointer[3] = new PointerRecord(0x9CE8L, 0, true, false);
-                locationExits.Pointer[4] = new PointerRecord(0x9CF8L, 0, true, false);
-                locationExits.Pointer[5] = new PointerRecord(0x9D12L, 0, true, false);
-                locationExits.Pointer[6] = new PointerRecord(0x9D19L, 0, true, false);
-                locationExits.Pointer[7] = new PointerRecord(0x9D20L, 0, true, false);
-                locationExits.Pointer[8] = new PointerRecord(0xA6A6L);
-                locationExits.Pointer[9] = new PointerRecord(0xA6BBL, 0, true, false);
-                locationExits.Pointer[10] = new PointerRecord(0xA6C4L, 0, true, false);
-                locationExits.Pointer[11] = new PointerRecord(0xA6E4L, 0, true, false);
+                locationExits.Pointer = new PointerRecord[]
+                {
+                    new PointerRecord(GlobalShared.GetRomAddr(RomAddr.LocExit)),
+                    new PointerRecord(0x9CD6L, 0, true, false),
+                    new PointerRecord(0x9CDEL, 0, true, false),
+                    new PointerRecord(0x9CE8L, 0, true, false),
+                    new PointerRecord(0x9CF8L, 0, true, false),
+                    new PointerRecord(0x9D12L, 0, true, false),
+                    new PointerRecord(0x9D19L, 0, true, false),
+                    new PointerRecord(0x9D20L, 0, true, false),
+                    new PointerRecord(0xA6A6L),
+                    new PointerRecord(0xA6BBL, 0, true, false),
+                    new PointerRecord(0xA6C4L, 0, true, false),
+                    new PointerRecord(0xA6E4L, 0, true, false)
+                };
             }
             else
             {
-                locationExits.Pointer = new PointerRecord[11];
-                locationExits.Pointer[0] = new PointerRecord(GlobalShared.GetRomAddr(RomAddr.LocExit));
-                locationExits.Pointer[1] = new PointerRecord(0x9538L, 0, true, false);
-                locationExits.Pointer[2] = new PointerRecord(0x9540L, 0, true, false);
-                locationExits.Pointer[3] = new PointerRecord(0x954AL, 0, true, false);
-                locationExits.Pointer[4] = new PointerRecord(0x9564L, 0, true, false);
-                locationExits.Pointer[5] = new PointerRecord(0x956BL, 0, true, false);
-                locationExits.Pointer[6] = new PointerRecord(0x9572L, 0, true, false);
-                locationExits.Pointer[7] = new PointerRecord(0x9FBFL);
-                locationExits.Pointer[8] = new PointerRecord(0x9FD4L, 0, true, false);
-                locationExits.Pointer[9] = new PointerRecord(0x9FDDL, 0, true, false);
-                locationExits.Pointer[10] = new PointerRecord(0x9FFDL, 0, true, false);
+                locationExits.Pointer = new PointerRecord[]
+                {
+                    new PointerRecord(GlobalShared.GetRomAddr(RomAddr.LocExit)),
+                    new PointerRecord(0x9538L, 0, true, false),
+                    new PointerRecord(0x9540L, 0, true, false),
+                    new PointerRecord(0x954AL, 0, true, false),
+                    new PointerRecord(0x9564L, 0, true, false),
+                    new PointerRecord(0x956BL, 0, true, false),
+                    new PointerRecord(0x9572L, 0, true, false),
+                    new PointerRecord(0x9FBFL),
+                    new PointerRecord(0x9FD4L, 0, true, false),
+                    new PointerRecord(0x9FDDL, 0, true, false),
+                    new PointerRecord(0x9FFDL, 0, true, false)
+                };
             }
             locationExits.nOrigAddr = GlobalShared.GetFileOffset((int)locationExits.Pointer[0].nByte);
             locationExits.Get();
@@ -190,39 +191,38 @@ namespace AnotherFlux.Models
             };
             if (romType != RomType.Beta)
             {
-                treasure.Pointer = new PointerRecord[8];
-                treasure.Pointer[0] = new PointerRecord(GlobalShared.GetRomAddr(RomAddr.Treasure));
-                treasure.Pointer[1] = new PointerRecord(0x1E1BL, 0, true, false);
-                treasure.Pointer[2] = new PointerRecord(0x1E5BL, 0, true, false);
-                treasure.Pointer[3] = new PointerRecord(0xA74BL, 2, true, true);
-                treasure.Pointer[4] = new PointerRecord(0xA751L);
-                treasure.Pointer[5] = new PointerRecord(0xA760L, 0, true, false);
-                treasure.Pointer[6] = new PointerRecord(0xA766L, 0, true, false);
-                treasure.Pointer[7] = new PointerRecord(0xA774L, 0, true, false);
+                treasure.Pointer = new PointerRecord[]
+                {
+                    new PointerRecord(GlobalShared.GetRomAddr(RomAddr.Treasure)),
+                    new PointerRecord(0x1E1BL, 0, true, false),
+                    new PointerRecord(0x1E5BL, 0, true, false),
+                    new PointerRecord(0xA74BL, 2, true, true),
+                    new PointerRecord(0xA751L),
+                    new PointerRecord(0xA760L, 0, true, false),
+                    new PointerRecord(0xA766L, 0, true, false),
+                    new PointerRecord(0xA774L, 0, true, false)
+                };
             }
             else
             {
-                treasure.Pointer = new PointerRecord[6];
-                treasure.Pointer[0] = new PointerRecord(GlobalShared.GetRomAddr(RomAddr.Treasure));
-                treasure.Pointer[1] = new PointerRecord(0x2025L, 0, true, false);
-                treasure.Pointer[2] = new PointerRecord(0x2065L, 0, true, false);
-                treasure.Pointer[3] = new PointerRecord(0xA064L);
-                treasure.Pointer[4] = new PointerRecord(0xA06CL);
-                treasure.Pointer[5] = new PointerRecord(0xA07CL, 0, true, false);
+                treasure.Pointer = new PointerRecord[]
+                {
+                    new PointerRecord(GlobalShared.GetRomAddr(RomAddr.Treasure)),
+                    new PointerRecord(0x2025L, 0, true, false),
+                    new PointerRecord(0x2065L, 0, true, false),
+                    new PointerRecord(0xA064L),
+                    new PointerRecord(0xA06CL),
+                    new PointerRecord(0xA07CL, 0, true, false)
+                };
             }
             treasure.nOrigAddr = GlobalShared.GetFileOffset((int)locationExits.Pointer[0].nByte);
             treasure.Get();
 
-            overworldPalettes = new SaveRecord[13];
-            GetSimpleRec(overworldPalettes, 0x200, RomAddr.OWPal);
-            overworldMaps = new SaveRecord[8];
-            GetSimpleRec(overworldMaps, 0x3000, RomAddr.OWMap);
-            overworldTileAssemblyL12 = new SaveRecord[6];
-            GetSimpleRec(overworldTileAssemblyL12, 0x1000, RomAddr.OWTileAsmL12);
-            overworldTileAssemblyL3 = new SaveRecord[6];
-            GetSimpleRec(overworldTileAssemblyL3, 0x1000, RomAddr.OWTileAsmL3);
-            overworldExits = new SaveRecord[8];
-            GetOWExitsRec(overworldExits, 0xB00, RomAddr.OWExit, false);
+            overworldPalettes = GetSaveRecords(13, 0x200, RomAddr.OWPal);
+            overworldMaps = GetSaveRecords(8, 0x3000, RomAddr.OWMap);
+            overworldTileAssemblyL12 = GetSaveRecords(6, 0x1000, RomAddr.OWTileAsmL12);
+            overworldTileAssemblyL3 = GetSaveRecords(6, 0x1000, RomAddr.OWTileAsmL3);
+            overworldExits = GetSaveRecords(8, 0xB00, RomAddr.OWExit, PointerType.OWExit);
 
             strings = new SaveRecord[15];
             for (var i = 0; i < strings.Length; i++)
@@ -233,24 +233,11 @@ namespace AnotherFlux.Models
             GetLocEvents();
             TranslationOpen(false);
 
-            overworldTileProperties = new SaveRecord[8];
-            G.GetSimpleRec(overworldTileProperties, 0x200, RomAddr.OWTileProps, true);
-
-            overworldEvents = new OESaveRecord[8];
-            for (var i = 0; i < overworldEvents.Length; i++)
-            {
-                overworldEvents[i] = new OESaveRecord(this)
-                {
-                    nMaxSize = 0x10000,
-                    Pointer = new PointerRecord[1],
-                    bCompressed = true
-                };
-                overworldEvents[i].Pointer[0] = new PointerRecord(GlobalShared.GetRomAddr(RomAddr.OWEvent) + i * 3);
-                overworldEvents[i].Get();
-            }
-
-            overworldMusicTransitionData = new SaveRecord[8];
-            G.GetSimpleRec(overworldMusicTransitionData, 0xC00, RomAddr.OWMTD, true);
+            overworldTileProperties = GetSaveRecords(8, 0x200, RomAddr.OWTileProps, true);
+            // TODO Temporal Flux writes comments of overworld events to the filesystem,
+            // we probably need to do the same
+            overworldEvents = GetSaveRecords(8, 0x10000, RomAddr.OWEvent);
+            overworldMusicTransitionData = GetSaveRecords(8, 0xC00, RomAddr.OWMTD, true);
 
             GlobalShared.PostStatus("Getting Custom Defined Data");
             for (var i = 0; i < CDRec.Count; i++)
@@ -277,6 +264,42 @@ namespace AnotherFlux.Models
                     GlobalShared.PostStatus("Error - " + PlugList[i].sPlugName + " could not load its data.");
                 }
             }
+        }
+
+        public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr)
+        {
+            return GetSaveRecords(length, maxSize, baseAddr, false);
+        }
+
+        public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty)
+        {
+            return GetSaveRecords(length, maxSize, baseAddr, createEmpty, PointerType.Simple);
+        }
+
+        public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, PointerType pointerType)
+        {
+            return GetSaveRecords(length, maxSize, baseAddr, false, pointerType);
+        }
+
+        public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty, PointerType pointerType)
+        {
+            var records = new SaveRecord[length];
+            for (var i = 0; i < length; i++)
+            {
+                records[i] = new SaveRecord
+                {
+                    nPointerType = pointerType,
+                    nMaxSize = maxSize,
+                    Pointer = new PointerRecord[]
+                    {
+                        new PointerRecord(GlobalShared.GetRomAddr(baseAddr) + i * 3)
+                    },
+                    bCompressed = true,
+                    bCreateEmpty = createEmpty
+                };
+                records[i].Get();
+            }
+            return records;
         }
     }
 }
