@@ -4,6 +4,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Models\StrSaveRecord.cs" />
+    <Compile Remove="Models\Translation.cs" />
+    <Compile Remove="Models\SubStrSaveRecord.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Views.Models\" />
     <Compile Update="**\*.xaml.cs">
@@ -24,5 +29,10 @@
     <ProjectReference Include="..\FluxShared\FluxShared.csproj" />
     <ProjectReference Include="..\PSVRender\PSVRender.csproj" />
     <ProjectReference Include="..\GGRLib\GGRLib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\StrSaveRecord.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' " />
+    <None Include="Models\Translation.cs" />
+    <None Include="Models\SubStrSaveRecord.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' " />
   </ItemGroup>
 </Project>

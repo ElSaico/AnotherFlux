@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>System.Windows.Forms</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WPFake\WPFake.csproj" />
+    <PackageReference Include="Avalonia" Version="0.9.12" />
   </ItemGroup>
 </Project>

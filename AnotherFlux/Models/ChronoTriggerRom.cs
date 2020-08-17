@@ -1,10 +1,11 @@
 using System.IO;
+
 using FluxShared;
 using AnotherFlux.Exceptions;
 
 namespace AnotherFlux.Models
 {
-    public class ChronoTrigger
+    public class ChronoTriggerRom
     {
         private const ushort ROM_HEADER_SIZE = 0x200;
         private const ushort ROM_BLOCK_SIZE = 0x8000;
@@ -105,7 +106,7 @@ namespace AnotherFlux.Models
             }
         }
 
-        public ChronoTrigger(string filename)
+        public ChronoTriggerRom(string filename)
         {
             using (var file = File.OpenRead(filename))
             {
@@ -225,13 +226,22 @@ namespace AnotherFlux.Models
             overworldExits = GetSaveRecords(8, 0xB00, RomAddr.OWExit, PointerType.OWExit);
 
             strings = new SaveRecord[15];
+            /*
             for (var i = 0; i < strings.Length; i++)
             {
                 strings[i] = new StrSaveRecord();
             }
             StrForm.InitForm();
-            GetLocEvents();
             TranslationOpen(false);
+            */
+
+            /*
+            locationEventsAndDialogue = GetSaveRecords<LESaveRecord>(0x201, 0x10000u, RomAddr.LocEvent);
+            foreach (var record in locationEventsAndDialogue)
+            {
+                record.LoadDialogue();
+            }
+            */
 
             overworldTileProperties = GetSaveRecords(8, 0x200, RomAddr.OWTileProps, true);
             // TODO Temporal Flux writes comments of overworld events to the filesystem,
@@ -239,55 +249,46 @@ namespace AnotherFlux.Models
             overworldEvents = GetSaveRecords(8, 0x10000, RomAddr.OWEvent);
             overworldMusicTransitionData = GetSaveRecords(8, 0xC00, RomAddr.OWMTD, true);
 
-            GlobalShared.PostStatus("Getting Custom Defined Data");
-            for (var i = 0; i < CDRec.Count; i++)
-            {
-                CDRec[i].bFullFlux = true;
-                CDRec[i].Get();
-            }
+            // TODO handle custom data
 
-            GlobalShared.PostStatus("Init Music Form");
-            MusicForm.FillSongs();
-            MusicForm.FillInstruments();
-
-            GlobalShared.PostStatus("Getting Misc Settings");
-            MSForm.InitForm();
-            if (((Control)CDForm).get_Visible())
+            /*
+            foreach (var plugin in plugins)
             {
-                CDForm.InitForm();
-            }
-
-            for (var i = 0; i < PlugList.Count; i++)
-            {
-                if (!PlugList[i].GetRecords())
+                if (!plugin.GetRecords())
                 {
-                    GlobalShared.PostStatus("Error - " + PlugList[i].sPlugName + " could not load its data.");
+                    GlobalShared.PostStatus($"Error - {plugin.sPlugName} could not load its data.");
                 }
             }
+            */
         }
 
         public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr)
-        {
-            return GetSaveRecords(length, maxSize, baseAddr, false);
-        }
+            => GetSaveRecords<SaveRecord>(length, maxSize, baseAddr, false);
 
         public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty)
-        {
-            return GetSaveRecords(length, maxSize, baseAddr, createEmpty, PointerType.Simple);
-        }
+            => GetSaveRecords<SaveRecord>(length, maxSize, baseAddr, createEmpty);
 
         public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, PointerType pointerType)
-        {
-            return GetSaveRecords(length, maxSize, baseAddr, false, pointerType);
-        }
+            => GetSaveRecords<SaveRecord>(length, maxSize, baseAddr, pointerType);
 
-        public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty, PointerType pointerType)
+        public T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr)
+            where T : SaveRecord, new() => GetSaveRecords<T>(length, maxSize, baseAddr, false, PointerType.Simple);
+
+        public T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty)
+            where T : SaveRecord, new() => GetSaveRecords<T>(length, maxSize, baseAddr, createEmpty, PointerType.Simple);
+
+        public T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, PointerType pointerType)
+            where T : SaveRecord, new() => GetSaveRecords<T>(length, maxSize, baseAddr, false, pointerType);
+
+        public T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty, PointerType pointerType)
+            where T: SaveRecord, new()
         {
-            var records = new SaveRecord[length];
-            for (var i = 0; i < length; i++)
+            var records = new T[length];
+            for (ushort i = 0; i < length; i++)
             {
-                records[i] = new SaveRecord
+                records[i] = new T
                 {
+                    nID = i,
                     nPointerType = pointerType,
                     nMaxSize = maxSize,
                     Pointer = new PointerRecord[]

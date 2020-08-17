@@ -1,6 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace GGRLib
 {
@@ -11,9 +9,6 @@ namespace GGRLib
 		public const int WM_LBUTTONDOWN = 513;
 
 		public const int WM_LBUTTONUP = 514;
-
-		[DllImport("user32.dll")]
-		private static extern bool SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 
 		public void ScrollToRow(int nRow) { }
 

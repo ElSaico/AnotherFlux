@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GGRLib", "GGRLib\GGRLib.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherFlux", "AnotherFlux\AnotherFlux.csproj", "{851A466F-1A2F-44D2-90EF-D6090E28C126}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFacade", "WPFake\WPFacade.csproj", "{D59552C6-076F-47D4-B90F-8D385146CB85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|anycpu = Debug|anycpu
@@ -31,5 +33,9 @@ Global
 		{851A466F-1A2F-44D2-90EF-D6090E28C126}.Debug|anycpu.Build.0 = Debug|Any CPU
 		{851A466F-1A2F-44D2-90EF-D6090E28C126}.Release|anycpu.ActiveCfg = Release|Any CPU
 		{851A466F-1A2F-44D2-90EF-D6090E28C126}.Release|anycpu.Build.0 = Release|Any CPU
+		{D59552C6-076F-47D4-B90F-8D385146CB85}.Debug|anycpu.ActiveCfg = Debug|Any CPU
+		{D59552C6-076F-47D4-B90F-8D385146CB85}.Debug|anycpu.Build.0 = Debug|Any CPU
+		{D59552C6-076F-47D4-B90F-8D385146CB85}.Release|anycpu.ActiveCfg = Release|Any CPU
+		{D59552C6-076F-47D4-B90F-8D385146CB85}.Release|anycpu.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -7,7 +7,5 @@ namespace GGRLib
 		public FlatSpin() { }
 
 		public FlatSpin(byte nDrawHeightArg) { }
-
-		protected override void WndProc(ref Message m) { }
 	}
 }
