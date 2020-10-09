@@ -3,7 +3,7 @@
     public enum RomType: byte
     {
         Japan,
-        USA,
+        Usa,
         Beta
     }
 }

@@ -4,7 +4,7 @@ namespace PSVRender
 {
 	public class PSV
 	{
-		internal static byte[] BitPlaneBits = new byte[16] {
+		internal static byte[] BitPlaneBits = {
 			1,
             2,
 			2,

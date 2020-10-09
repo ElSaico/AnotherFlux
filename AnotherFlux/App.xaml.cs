@@ -1,8 +1,8 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using AnotherFlux.ViewModels;
 using AnotherFlux.Views;
+using AnotherFlux.Views.Models;
 
 namespace AnotherFlux
 {

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// ReSharper disable InconsistentNaming
+
+using System.Collections.Generic;
 using PSVRender;
 
 namespace FluxShared
@@ -8,7 +10,7 @@ namespace FluxShared
 		public delegate void PostStatusDel(string sStatus);
 		public delegate string GetStrFromGroupDel(StrRecType nGroup, ushort nIndex);
 		public static string[] sLocation = new string[512];
-		public static string[] sDefLocation = new string[512] {
+		public static string[] sDefLocation = {
 			"{000} Load Screen",
 			"{001} Crono's Kitchen",
 			"{002} Crono's Room",
@@ -524,7 +526,7 @@ namespace FluxShared
 		};
 		public static string[] sBetaLocation = new string[512];
 		public static string[] sOverworld = new string[8];
-		public static string[] sDefOverworld = new string[8] {
+		public static string[] sDefOverworld = {
 			"{0} Present",
 			"{1} Middle Ages",
 			"{2} Future",
@@ -534,13 +536,13 @@ namespace FluxShared
 			"{6} Last Village",
 			"{7} Apocalypse"
 		};
-		public static string[] sCardDir = new string[4] {
+		public static string[] sCardDir = {
 			"Up",
 			"Down",
 			"Left",
 			"Right"
 		};
-		public static string[] sPC = new string[8] {
+		public static string[] sPC = {
 			"Crono",
 			"Marle",
 			"Lucca",
@@ -550,7 +552,7 @@ namespace FluxShared
 			"Magus",
 			"Epoch"
 		};
-		public static string[] sNPC = new string[256] {
+		public static string[] sNPC = {
 			"{00} Melchior",
 			"{01} King Guardia XXXIII [1000 A.D.]",
 			"{02} Johnny",
@@ -808,7 +810,7 @@ namespace FluxShared
 			"{FE} UNUSED",
 			"{FF} UNUSED"
 		};
-		public static string[] sSoundEffect = new string[256] {
+		public static string[] sSoundEffect = {
 			"{00} Cursor selection",
 			"{01} Invalid cursor selection",
 			"{02} Falling sprite",
@@ -1066,7 +1068,7 @@ namespace FluxShared
 			"{FE} Unknown (Unused) [LOOPS]",
 			"{FF} [END LOOP]"
 		};
-		public static string[] sStore = new string[24] {
+		public static string[] sStore = {
 			"Store 00 - Melchior (Millennial Fair)",
 			"Store 01 - Truce Market (Middle Ages)",
 			"Store 02 - Truce Market (Present)",
@@ -1092,7 +1094,7 @@ namespace FluxShared
 			"Store 16 - Fiona's Shrine",
 			"Store 17 - Black Omen"
 		};
-		public static string[] sColorMathColors = new string[8] {
+		public static string[] sColorMathColors = {
 			"Off / Black",
 			"Red",
 			"Lime",

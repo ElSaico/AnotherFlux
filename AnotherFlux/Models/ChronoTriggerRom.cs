@@ -1,56 +1,52 @@
 using System.IO;
-
-using FluxShared;
 using AnotherFlux.Exceptions;
+using FluxShared;
 
 namespace AnotherFlux.Models
 {
     public class ChronoTriggerRom
     {
-        private const ushort ROM_HEADER_SIZE = 0x200;
-        private const ushort ROM_BLOCK_SIZE = 0x8000;
-        private const byte ROM_NAME_LENGTH = 21;
-        private const string ROM_NAME = "CHRONO TRIGGER       ";
-        private const uint ROM_INTERLEAVE_OFFSET = 0x200000;
-        private const byte ROM_TYPE_EXHIROM = 0x35;
+        private const ushort RomHeaderSize = 0x200;
+        private const ushort RomBlockSize = 0x8000;
+        private const byte RomNameLength = 21;
+        private const string RomName = "CHRONO TRIGGER       ";
+        private const uint RomInterleaveOffset = 0x200000;
+        private const byte RomTypeExhirom = 0x35;
 
-        private byte[] rawData;
-        private RomType romType;
+        private byte[] _rawData;
+        private readonly RomType _romType;
 
-        private bool expandedRom;
-        private bool patchAllNlz;
-        private bool patchDactylNlz;
-        private bool patchStartLocation;
-        private bool patchBetaEvents;
-        private SaveRecord[] locationMaps;
-        private SaveRecord[] locationTileAssemblyL3;
-        private SaveRecord[] locationTileAssemblyL12;
-        private SaveRecord locationExits;
-        private SaveRecord treasure;
-        private SaveRecord[] overworldPalettes;
-        private SaveRecord[] overworldMaps;
-        private SaveRecord[] overworldTileAssemblyL3;
-        private SaveRecord[] overworldTileAssemblyL12;
-        private SaveRecord[] overworldExits;
-        private SaveRecord[] strings;
-        private SaveRecord[] overworldTileProperties;
-        private SaveRecord[] overworldEvents;
-        private SaveRecord[] overworldMusicTransitionData;
-        private SaveRecord[] customData;
-        private SaveRecord[] locationEventsAndDialogue;
-        private SaveRecord[] substrings;
+        private bool _expandedRom;
+        private bool _patchAllNlz;
+        private bool _patchDactylNlz;
+        private bool _patchStartLocation;
+        private bool _patchBetaEvents;
+        private SaveRecord[] _locationMaps;
+        private SaveRecord[] _locationTileAssemblyL3;
+        private SaveRecord[] _locationTileAssemblyL12;
+        private SaveRecord _locationExits;
+        private SaveRecord _treasure;
+        private SaveRecord[] _overworldPalettes;
+        private SaveRecord[] _overworldMaps;
+        private SaveRecord[] _overworldTileAssemblyL3;
+        private SaveRecord[] _overworldTileAssemblyL12;
+        private SaveRecord[] _overworldExits;
+        private SaveRecord[] _strings;
+        private SaveRecord[] _overworldTileProperties;
+        private SaveRecord[] _overworldEvents;
+        private SaveRecord[] _overworldMusicTransitionData;
+        private SaveRecord[] _customData;
+        private SaveRecord[] _locationEventsAndDialogue;
+        private SaveRecord[] _substrings;
 
         public static bool IsRomHeadered(FileStream rom)
         {
-            if ((rom.Length % ROM_BLOCK_SIZE) != 0)
+            return (rom.Length % RomBlockSize) switch
             {
-                if ((rom.Length % ROM_BLOCK_SIZE) != ROM_HEADER_SIZE)
-                {
-                    throw new RomReadException("Incorrect ROM size");
-                }
-                return true;
-            }
-            return false;
+                0 => false,
+                RomHeaderSize => true,
+                _ => throw new RomReadException("Incorrect ROM size")
+            };
         }
 
         public static void ScrubRomHeader(string filename)
@@ -63,7 +59,7 @@ namespace AnotherFlux.Models
             };
             using (var writer = new BinaryWriter(File.OpenWrite(filename)))
             {
-                writer.Write(romData, ROM_HEADER_SIZE, romData.Length - ROM_HEADER_SIZE);
+                writer.Write(romData, RomHeaderSize, romData.Length - RomHeaderSize);
                 writer.Flush();
             }
         }
@@ -72,16 +68,10 @@ namespace AnotherFlux.Models
         {
             using var reader = new BinaryReader(file);
             file.Seek((long)RomAddress.Name, SeekOrigin.Begin);
-            if (reader.ReadChars(ROM_NAME_LENGTH).ToString() != ROM_NAME)
-            {
-                file.Seek((long)RomAddress.NameInterleaved, SeekOrigin.Begin);
-                if (reader.ReadChars(ROM_NAME_LENGTH).ToString() != ROM_NAME)
-                {
-                    throw new RomReadException("Incorrect ROM name");
-                }
-                return true;
-            }
-            return false;
+            if (reader.ReadChars(RomNameLength).ToString() == RomName) return false;
+            file.Seek((long)RomAddress.NameInterleaved, SeekOrigin.Begin);
+            if (reader.ReadChars(RomNameLength).ToString() == RomName) return true;
+            throw new RomReadException("Incorrect ROM name");
         }
 
         public static void DeinterleaveRom(string filename)
@@ -93,14 +83,14 @@ namespace AnotherFlux.Models
                 using var reader = new BinaryReader(file);
                 file.Seek(0L, SeekOrigin.Begin);
                 romData = reader.ReadBytes((int)file.Length);
-                nBlocks = (byte)(file.Length / ROM_BLOCK_SIZE);
+                nBlocks = (byte)(file.Length / RomBlockSize);
             }
             using (var writer = new BinaryWriter(File.OpenWrite(filename)))
             {
                 for (var i = 0; i < nBlocks; i++)
                 {
-                    writer.Write(romData, (int)((i * ROM_BLOCK_SIZE) | ROM_INTERLEAVE_OFFSET), ROM_BLOCK_SIZE);
-                    writer.Write(romData, i * ROM_BLOCK_SIZE, ROM_BLOCK_SIZE);
+                    writer.Write(romData, (int)((i * RomBlockSize) | RomInterleaveOffset), RomBlockSize);
+                    writer.Write(romData, i * RomBlockSize, RomBlockSize);
                 }
                 writer.Flush();
             }
@@ -117,37 +107,37 @@ namespace AnotherFlux.Models
                     throw new RomReadException("Invalid ROM version; v1.0 required");
                 }
                 file.Seek(0L, SeekOrigin.Begin);
-                rawData = reader.ReadBytes((int)file.Length);
+                _rawData = reader.ReadBytes((int)file.Length);
             }
 
-            romType = (RomType)rawData[(int)RomAddress.Region];
-            if (romType == RomType.Japan && rawData[0xFF05] == 0xC7)
-            { // TODO figure out the logic behind this test
-                romType = RomType.Beta;
-            }
+            _romType = _romType switch
+            {
+                RomType.Japan when _rawData[0xFF05] == 0xC7 => RomType.Beta, // original TF check, but what's the logic?
+                _ => (RomType) _rawData[(int) RomAddress.Region]
+            };
 
-            expandedRom = rawData[(int)RomAddress.MapMode] == ROM_TYPE_EXHIROM;
+            _expandedRom = _rawData[(int)RomAddress.MapMode] == RomTypeExhirom;
 
             // TODO check if the logic of these tests is not inverted
-            patchAllNlz = romType == RomType.Beta || rawData[GlobalShared.GetRomAddr(RomAddr.NLZPatch)] != 0x64;
-            patchDactylNlz = romType == RomType.Beta || rawData[GlobalShared.GetRomAddr(RomAddr.DactylPatch)] == 0x64;
-            patchStartLocation = romType == RomType.Beta || rawData[0x2E1A] != 0x20;
-            patchBetaEvents = romType == RomType.Beta && rawData[0x372012] != 0xA7;
+            _patchAllNlz = _romType == RomType.Beta || _rawData[GlobalShared.GetRomAddr(RomAddr.NLZPatch)] != 0x64;
+            _patchDactylNlz = _romType == RomType.Beta || _rawData[GlobalShared.GetRomAddr(RomAddr.DactylPatch)] == 0x64;
+            _patchStartLocation = _romType == RomType.Beta || _rawData[0x2E1A] != 0x20;
+            _patchBetaEvents = _romType == RomType.Beta && _rawData[0x372012] != 0xA7;
 
-            locationMaps = GetSaveRecords(256, 0x6006, RomAddr.LocMap);
-            locationTileAssemblyL12 = GetSaveRecords(87, 0x1000, RomAddr.LocTileAsmL12);
-            locationTileAssemblyL3 = GetSaveRecords(23, 0x1000, RomAddr.LocTileAsmL3);
+            _locationMaps = GetSaveRecords(256, 0x6006, RomAddr.LocMap);
+            _locationTileAssemblyL12 = GetSaveRecords(87, 0x1000, RomAddr.LocTileAsmL12);
+            _locationTileAssemblyL3 = GetSaveRecords(23, 0x1000, RomAddr.LocTileAsmL3);
 
-            locationExits = new SaveRecord
+            _locationExits = new SaveRecord
             {
                 nMaxSize = 0x700,
                 nPointerType = PointerType.SizedByAddress,
                 nRecords = 0x200,
                 nRecSize = 7
             };
-            if (romType != RomType.USA)
+            if (_romType != RomType.Usa)
             {
-                locationExits.Pointer = new PointerRecord[]
+                _locationExits.Pointer = new[]
                 {
                     new PointerRecord(GlobalShared.GetRomAddr(RomAddr.LocExit)),
                     new PointerRecord(0x9CD6L, 0, true, false),
@@ -165,7 +155,7 @@ namespace AnotherFlux.Models
             }
             else
             {
-                locationExits.Pointer = new PointerRecord[]
+                _locationExits.Pointer = new[]
                 {
                     new PointerRecord(GlobalShared.GetRomAddr(RomAddr.LocExit)),
                     new PointerRecord(0x9538L, 0, true, false),
@@ -180,19 +170,19 @@ namespace AnotherFlux.Models
                     new PointerRecord(0x9FFDL, 0, true, false)
                 };
             }
-            locationExits.nOrigAddr = GlobalShared.GetFileOffset((int)locationExits.Pointer[0].nByte);
-            locationExits.Get();
+            _locationExits.nOrigAddr = GlobalShared.GetFileOffset((int)_locationExits.Pointer[0].nByte);
+            _locationExits.Get();
 
-            treasure = new SaveRecord
+            _treasure = new SaveRecord
             {
                 nMaxSize = 0x400,
                 nPointerType = PointerType.SizedByAddress,
                 nRecords = 0x200,
                 nRecSize = 4
             };
-            if (romType != RomType.Beta)
+            if (_romType != RomType.Beta)
             {
-                treasure.Pointer = new PointerRecord[]
+                _treasure.Pointer = new[]
                 {
                     new PointerRecord(GlobalShared.GetRomAddr(RomAddr.Treasure)),
                     new PointerRecord(0x1E1BL, 0, true, false),
@@ -206,7 +196,7 @@ namespace AnotherFlux.Models
             }
             else
             {
-                treasure.Pointer = new PointerRecord[]
+                _treasure.Pointer = new[]
                 {
                     new PointerRecord(GlobalShared.GetRomAddr(RomAddr.Treasure)),
                     new PointerRecord(0x2025L, 0, true, false),
@@ -216,16 +206,16 @@ namespace AnotherFlux.Models
                     new PointerRecord(0xA07CL, 0, true, false)
                 };
             }
-            treasure.nOrigAddr = GlobalShared.GetFileOffset((int)locationExits.Pointer[0].nByte);
-            treasure.Get();
+            _treasure.nOrigAddr = GlobalShared.GetFileOffset((int)_locationExits.Pointer[0].nByte);
+            _treasure.Get();
 
-            overworldPalettes = GetSaveRecords(13, 0x200, RomAddr.OWPal);
-            overworldMaps = GetSaveRecords(8, 0x3000, RomAddr.OWMap);
-            overworldTileAssemblyL12 = GetSaveRecords(6, 0x1000, RomAddr.OWTileAsmL12);
-            overworldTileAssemblyL3 = GetSaveRecords(6, 0x1000, RomAddr.OWTileAsmL3);
-            overworldExits = GetSaveRecords(8, 0xB00, RomAddr.OWExit, PointerType.OWExit);
+            _overworldPalettes = GetSaveRecords(13, 0x200, RomAddr.OWPal);
+            _overworldMaps = GetSaveRecords(8, 0x3000, RomAddr.OWMap);
+            _overworldTileAssemblyL12 = GetSaveRecords(6, 0x1000, RomAddr.OWTileAsmL12);
+            _overworldTileAssemblyL3 = GetSaveRecords(6, 0x1000, RomAddr.OWTileAsmL3);
+            _overworldExits = GetSaveRecords(8, 0xB00, RomAddr.OWExit, PointerType.OWExit);
 
-            strings = new SaveRecord[15];
+            _strings = new SaveRecord[15];
             /*
             for (var i = 0; i < strings.Length; i++)
             {
@@ -243,11 +233,10 @@ namespace AnotherFlux.Models
             }
             */
 
-            overworldTileProperties = GetSaveRecords(8, 0x200, RomAddr.OWTileProps, true);
-            // TODO Temporal Flux writes comments of overworld events to the filesystem,
-            // we probably need to do the same
-            overworldEvents = GetSaveRecords(8, 0x10000, RomAddr.OWEvent);
-            overworldMusicTransitionData = GetSaveRecords(8, 0xC00, RomAddr.OWMTD, true);
+            _overworldTileProperties = GetSaveRecords(8, 0x200, RomAddr.OWTileProps, true);
+            // TODO Temporal Flux writes comments of overworld events to the filesystem, we probably need to do the same
+            _overworldEvents = GetSaveRecords(8, 0x10000, RomAddr.OWEvent);
+            _overworldMusicTransitionData = GetSaveRecords(8, 0xC00, RomAddr.OWMTD, true);
 
             // TODO handle custom data
 
@@ -262,25 +251,25 @@ namespace AnotherFlux.Models
             */
         }
 
-        public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr)
+        private static SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr)
             => GetSaveRecords<SaveRecord>(length, maxSize, baseAddr, false);
 
-        public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty)
+        private static SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty)
             => GetSaveRecords<SaveRecord>(length, maxSize, baseAddr, createEmpty);
 
-        public SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, PointerType pointerType)
+        private static SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, PointerType pointerType)
             => GetSaveRecords<SaveRecord>(length, maxSize, baseAddr, pointerType);
 
         public T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr)
             where T : SaveRecord, new() => GetSaveRecords<T>(length, maxSize, baseAddr, false, PointerType.Simple);
 
-        public T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty)
+        private static T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty)
             where T : SaveRecord, new() => GetSaveRecords<T>(length, maxSize, baseAddr, createEmpty, PointerType.Simple);
 
-        public T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, PointerType pointerType)
+        private static T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, PointerType pointerType)
             where T : SaveRecord, new() => GetSaveRecords<T>(length, maxSize, baseAddr, false, pointerType);
 
-        public T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty, PointerType pointerType)
+        private static T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty, PointerType pointerType)
             where T: SaveRecord, new()
         {
             var records = new T[length];
@@ -291,7 +280,7 @@ namespace AnotherFlux.Models
                     nID = i,
                     nPointerType = pointerType,
                     nMaxSize = maxSize,
-                    Pointer = new PointerRecord[]
+                    Pointer = new[]
                     {
                         new PointerRecord(GlobalShared.GetRomAddr(baseAddr) + i * 3)
                     },
