@@ -54,6 +54,7 @@ namespace AnotherFlux.Models
 		}
 	}
 
+	/*
 	internal class StrSaveRecord : SaveRecord
 	{
 		public Dictionary<byte, StringRec> StrRec;
@@ -170,7 +171,7 @@ namespace AnotherFlux.Models
                         ptrAddr = (uint) ((RomType) GlobalShared.nRomType switch
                         {
                             RomType.Japan => nOrigAddr + (workingData[0x26944 + idx] << 1),
-                            RomType.USA => nOrigAddr + (workingData[0x269F0 + idx] << 1),
+                            RomType.Usa => nOrigAddr + (workingData[0x269F0 + idx] << 1),
 							_ => nOrigAddr + (workingData[0x26DD3 + idx] << 1),
 						});
                     }
@@ -179,7 +180,7 @@ namespace AnotherFlux.Models
                         ptrAddr = (uint) ((RomType) GlobalShared.nRomType switch
                         {
                             RomType.Japan => nOrigAddr + (workingData[0x268F0] << 1),
-                            RomType.USA => nOrigAddr + (workingData[0x2699C] << 1),
+                            RomType.Usa => nOrigAddr + (workingData[0x2699C] << 1),
 							_ => nOrigAddr + (workingData[0x26D7F] << 1),
 						});
                     }
@@ -249,7 +250,7 @@ namespace AnotherFlux.Models
 
 		private bool FixedLengthSave()
 		{
-			byte fill = GlobalShared.nRomType == (byte)RomType.USA ? (byte)0xEF : byte.MaxValue;
+			byte fill = GlobalShared.nRomType == (byte)RomType.Usa ? (byte)0xEF : byte.MaxValue;
             for (byte idx = 0; idx < StringTable.Rows.Count; idx++)
 			{
 				string compressedString = GetCompressedString(idx);
@@ -362,7 +363,7 @@ namespace AnotherFlux.Models
 							GlobalShared.WorkingData[0x268D3] = 2;
 							break;
 						}
-					case RomType.USA:
+					case RomType.Usa:
 						{
 							for (byte idx = 0; idx < 8; idx++)
 							{
@@ -447,7 +448,7 @@ namespace AnotherFlux.Models
                         offset = (RomType) GlobalShared.nRomType switch
                         {
                             RomType.Japan => (uint)(nOrigAddr + (workingData[0x26944 + idx] << 1)),
-                            RomType.USA => (uint)(nOrigAddr + (workingData[0x269F0 + idx] << 1)),
+                            RomType.Usa => (uint)(nOrigAddr + (workingData[0x269F0 + idx] << 1)),
 							_ => (uint)(nOrigAddr + (workingData[0x26DD3 + idx] << 1)),
 						};
                     }
@@ -456,7 +457,7 @@ namespace AnotherFlux.Models
                         offset = (RomType) GlobalShared.nRomType switch
                         {
                             RomType.Japan => (uint)(nOrigAddr + (workingData[0x268F0] << 1)),
-                            RomType.USA => (uint)(nOrigAddr + (workingData[0x2699C] << 1)),
+                            RomType.Usa => (uint)(nOrigAddr + (workingData[0x2699C] << 1)),
 							_ => (uint)(nOrigAddr + (workingData[0x26D7F] << 1)),
 						};
                     }
@@ -557,7 +558,7 @@ namespace AnotherFlux.Models
 			string zero = GetDictVal(0, 0, 0); // TODO uhh what does this actually mean?
 			if (nRecSize != 0)
 			{
-				var fill = GlobalShared.nRomType == (byte)RomType.USA ? GetDictVal(0, 0, 0xEF) : GetDictVal(0, 0, byte.MaxValue);
+				var fill = GlobalShared.nRomType == (byte)RomType.Usa ? GetDictVal(0, 0, 0xEF) : GetDictVal(0, 0, byte.MaxValue);
                 defaultText = defaultText.Replace(zero, "").PadRight((int)nRecSize, fill[0]);
 				oldDefault = oldDefault.Replace(zero, "").PadRight((int)nRecSize, fill[0]);
 			}
@@ -682,4 +683,5 @@ namespace AnotherFlux.Models
 			}
 		}
 	}
+	*/
 }

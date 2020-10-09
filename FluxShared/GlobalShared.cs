@@ -1110,20 +1110,29 @@ namespace FluxShared
 		public static byte[] WorkingData;
 		public static cFreeSpace FreeSpace;
 		public static byte nZoomFactor = 1;
-		public static DockPanel DockMan;
-		public static StatusBarPanel CoordStatus;
+		//public static DockPanel DockMan;
+		//public static StatusBarPanel CoordStatus;
 		public static Dictionary<uint, string> KnownAddrHash = new Dictionary<uint, string>();
 		public static PostStatusDel PostStatus;
 		public static GetStrFromGroupDel GetStrFromGroup;
 
-		public static string KnownAddr(uint nAddr) { }
+		//public static string KnownAddr(uint nAddr) { }
 
-		public static uint GetFileOffset(uint[] nData) { }
+		//public static uint GetFileOffset(uint[] nData) { }
 
-		public static uint GetFileOffset(int nAddrOffset) { }
+		public static uint GetFileOffset(int nAddrOffset)
+		{
+			return 0;
+		}
 
-		public static uint GetRomAddr(RomAddr RomAddress) { }
+		public static uint GetRomAddr(RomAddr RomAddress)
+		{
+			return 0;
+		}
 
-		public static ushort GetRomValue(RomValue RomVal) { }
+		public static ushort GetRomValue(RomValue RomVal)
+		{
+			return 0;
+		}
 	}
 }

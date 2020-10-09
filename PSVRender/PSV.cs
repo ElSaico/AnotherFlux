@@ -23,7 +23,7 @@ namespace PSVRender
 			32
 		};
 
-		internal static bool IsRBGMode(BitPlanes nBitPlanes) { }
+		//internal static bool IsRBGMode(BitPlanes nBitPlanes) { }
 
 		public static void GetGreyPalette(ref Color[] WorkingPalette, ushort nColors) { }
 	}

@@ -1,5 +1,6 @@
 ﻿namespace System.Windows.Forms
 {
+    /*
     public class TreeView
     {
         private Avalonia.Controls.TreeView actualView;
@@ -34,4 +35,5 @@
     {
         private Avalonia.Controls.ButtonSpinner actualSpinner;
     }
+    */
 }

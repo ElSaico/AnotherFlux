@@ -4,8 +4,4 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>System.Windows.Forms</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.9.12" />
-  </ItemGroup>
 </Project>

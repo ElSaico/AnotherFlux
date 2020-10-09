@@ -1,8 +1,7 @@
-﻿using System.Windows.Forms;
-
+﻿
 namespace GGRLib
 {
-	public class FlatSpin : NumericUpDown
+	public class FlatSpin //: NumericUpDown
 	{
 		public FlatSpin() { }
 

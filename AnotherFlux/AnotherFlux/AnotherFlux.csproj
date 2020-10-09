@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Eto.Forms" Version="2.5.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Models\StrSaveRecord.cs" />
+      <None Include="Models\SubStrSaveRecord.cs" />
+      <None Include="Models\Translation.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\FluxShared\FluxShared.csproj" />
+      <ProjectReference Include="..\..\GGRLib\GGRLib.csproj" />
+    </ItemGroup>
+
+</Project>

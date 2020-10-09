@@ -30,14 +30,14 @@
 
 		public void SetData(PointerRecord Rec) { }
 
-		public override bool Equals(object obj) { }
+		//public override bool Equals(object obj) { }
 
-		public override int GetHashCode() { }
+		//public override int GetHashCode() { }
 
-		public uint GetFileOffset() { }
+		//public uint GetFileOffset() { }
 
-		public uint GetLocalFileOffset() { }
+		//public uint GetLocalFileOffset() { }
 
-		public ushort SizedByAddressRecROMSize() { }
+		//public ushort SizedByAddressRecROMSize() { }
 	}
 }

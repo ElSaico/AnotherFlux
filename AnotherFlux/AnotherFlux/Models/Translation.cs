@@ -132,6 +132,7 @@ namespace AnotherFlux.Models
 			return text;
 		}
 
+		/*
 		public string CompressString(string sOriginal, AlphaType nType, StrCompMode Mode, bool bNullEnd)
 		{
 			return CompressString(ref sOriginal, nType, Mode, bNullEnd);
@@ -292,5 +293,6 @@ namespace AnotherFlux.Models
 			sOriginal = DecompressString(stringReplacer.sCompressed, nType);
 			return stringReplacer.sCompressed;
 		}
+		*/
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace AnotherFlux.Models
 {
-	internal enum StrCompMode : byte
+	public enum StrCompMode : byte
 	{
 		Normal,
 		NoSubstrings,

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace GGRLib
 {
-	public class TreeViewMS : TreeView
+	public class TreeViewMS //: TreeView
 	{
+		/*
 		protected List<TreeNode> nodes;
 
 		protected TreeNode lastNode;
@@ -31,6 +31,7 @@ namespace GGRLib
 		{
 			nodes = new List<TreeNode>();
 		}
+		*/
 
 		/*
 		protected override void OnPaint(PaintEventArgs pe)

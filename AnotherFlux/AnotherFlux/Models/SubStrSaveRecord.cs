@@ -5,6 +5,7 @@ using System.IO;
 
 namespace AnotherFlux.Models
 {
+	/*
 	internal class SubStrSaveRecord : SaveRecord
 	{
 		public SubStrSaveRecord()
@@ -190,4 +191,5 @@ namespace AnotherFlux.Models
 			}
 		}
 	}
+	*/
 }

@@ -1,8 +1,7 @@
-﻿using System.Windows.Forms;
-
+﻿
 namespace GGRLib
 {
-	public class MyDataGrid : DataGrid
+	public class MyDataGrid //: DataGrid
 	{
 		public const int WM_KEYDOWN = 256;
 

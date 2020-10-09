@@ -4,7 +4,7 @@ namespace FluxShared
 {
 	public class SaveRecord
 	{
-		private const ushort MAX_POINTERS = 256;
+		private const ushort MaxPointers = 256;
 
 		public delegate void GetDel();
 		public delegate bool SaveDel();
@@ -22,7 +22,7 @@ namespace FluxShared
 		public bool bOverride;
 
 		public ushort nPointers;
-		private PointerRecord[] pointer = new PointerRecord[MAX_POINTERS];
+		private PointerRecord[] pointer = new PointerRecord[MaxPointers];
 		public PointerRecord[] Pointer {
 			get => pointer;
 			set {
@@ -35,6 +35,7 @@ namespace FluxShared
 			get => pointerType;
 			set {
 				pointerType = value;
+				/*
 				switch (pointerType)
 				{
 				case PointerType.SizedByAddress:
@@ -66,6 +67,7 @@ namespace FluxShared
 					RecExport = SimpleExport;
 					break;
 				}
+				*/
 			}
 		}
 
@@ -110,7 +112,7 @@ namespace FluxShared
 
 		public void MergePointers(SaveRecord Rec)
 		{
-			if (nPointers == MAX_POINTERS) return;
+			if (nPointers == MaxPointers) return;
 
 			for (int i = 0; i < Rec.nPointers; i++)
 			{
@@ -122,7 +124,7 @@ namespace FluxShared
 					Pointer[nPointers].SetData(Rec.Pointer[i]);
 					nPointers++;
 				}
-				if (nPointers == MAX_POINTERS)
+				if (nPointers == MaxPointers)
 				{
 					break;
 				}
@@ -131,13 +133,16 @@ namespace FluxShared
 
 		public void Get() => RecGet();
 
-		public bool Save() { }
+		//public bool Save() { }
 
 		public void Reseat() { }
 
-		public bool Claim() { }
+		//public bool Claim() { }
 
-		public uint Size() { }
+		public uint Size()
+		{
+			return 0;
+		}
 
 		public void Import(BinaryReader Bin, ushort anSchema, ushort anVersion) { }
 
