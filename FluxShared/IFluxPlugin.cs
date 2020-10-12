@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace FluxShared
 {
@@ -9,7 +10,7 @@ namespace FluxShared
         ushort nFluxVersion { get; }
         ushort nFluxMinSchema { get; }
         ushort nFluxMinVersion { get; }
-        //MenuItem PlugMenu { get; set; }
+        MenuItem PlugMenu { get; set; }
         List<SaveRecord[]> RecList { get; set; }
         Dictionary<string, int> RecDict { get; set; }
 

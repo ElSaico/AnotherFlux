@@ -6,5 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PSVRender\PSVRender.csproj" />
+    <ProjectReference Include="..\WPFake\WPFacade.csproj" />
   </ItemGroup>
 </Project>

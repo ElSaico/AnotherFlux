@@ -1,39 +1,42 @@
 ﻿namespace System.Windows.Forms
 {
-    /*
     public class TreeView
     {
-        private Avalonia.Controls.TreeView actualView;
+        private Eto.Forms.TreeGridView _actualView;
     }
 
     public class TreeNode
     {
-        private Avalonia.Controls.TreeViewItem actualNode;
+        private Eto.Forms.TreeGridItem _actualNode;
     }
 
     public class Button
     {
-        private Avalonia.Controls.Button actualButton;
+        private Eto.Forms.Button _actualButton;
     }
 
     public class ComboBox
     {
-        private Avalonia.Controls.ComboBox actualBox;
+        private Eto.Forms.ComboBox _actualBox;
     }
 
     public class TextBox
     {
-        private Avalonia.Controls.TextBox actualBox;
+        private Eto.Forms.TextBox _actualBox;
     }
 
     public class DataGrid
     {
-        private Avalonia.Controls.Grid actualGrid;
+        private Eto.Forms.Grid _actualGrid;
     }
 
     public class NumericUpDown
     {
-        private Avalonia.Controls.ButtonSpinner actualSpinner;
+        private Eto.Forms.Spinner _actualSpinner;
     }
-    */
+
+    public class MenuItem
+    {
+        public readonly Eto.Forms.MenuItem ActualItem;
+    }
 }
