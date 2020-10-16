@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using AnotherFlux.Commands;
+using AnotherFlux.Models;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
@@ -7,15 +9,17 @@ using GGRLib;
 
 namespace AnotherFlux
 {
-    public sealed class MainForm : Form
+    public class MainForm : Form
     {
+        public ChronoTriggerRom Rom { get; set; }
+
         private readonly ButtonMenuItem _fileMenu = new ButtonMenuItem
         {
             Text = "&File",
             Items =
             {
-                new ButtonMenuItem {Text = "&Open", Shortcut = Keys.Control | Keys.O},
-                new ButtonMenuItem {Text = "&Save", Enabled = false, Shortcut = Keys.Control | Keys.Shift | Keys.S},
+                new OpenCommand(),
+                new SaveCommand(),
                 new ButtonMenuItem {Text = "Save as...", Enabled = false},
                 new CheckMenuItem {Text = "Auto-Archive"},
                 new ButtonMenuItem {Text = "Mark All Modified", Enabled = false},
@@ -109,14 +113,6 @@ namespace AnotherFlux
             }
         };
 
-        private readonly OpenFileDialog _openRom = new OpenFileDialog
-        {
-            Filters =
-            {
-                new FileFilter("ROM Files", ".smc", ".sfc"),
-                new FileFilter("All Files", ".*")
-            }
-        };
 
         private readonly SaveFileDialog _saveRom = new SaveFileDialog
         {
