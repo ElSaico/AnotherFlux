@@ -24,11 +24,12 @@ namespace AnotherFlux.Commands
             }
         };
 
-        public OpenCommand()
+        public OpenCommand(MainForm form)
         {
             MenuText = "&Open";
             ToolBarText = "Open";
             Shortcut = Application.Instance.CommonModifier | Keys.O;
+            DataContext = form;
         }
 
         protected override void OnExecuted(EventArgs e)
@@ -63,7 +64,7 @@ namespace AnotherFlux.Commands
                     ChronoTriggerRom.DeinterleaveRom(_openRom.FileName);
                     GlobalShared.PostStatus("");
                 }
-                ((MainForm) Application.Instance.MainForm).Rom = new ChronoTriggerRom(_openRom.FileName);
+                ((MainForm)DataContext).Rom = new ChronoTriggerRom(_openRom.FileName);
             }
             catch (RomReadException ex)
             {

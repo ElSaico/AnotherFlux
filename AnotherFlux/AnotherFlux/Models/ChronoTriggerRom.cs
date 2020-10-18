@@ -1,10 +1,14 @@
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Text;
+using AnotherFlux.Annotations;
 using AnotherFlux.Exceptions;
 using FluxShared;
 
 namespace AnotherFlux.Models
 {
-    public class ChronoTriggerRom
+    public sealed class ChronoTriggerRom : INotifyPropertyChanged
     {
         private const ushort RomHeaderSize = 0x200;
         private const ushort RomBlockSize = 0x8000;
@@ -13,8 +17,7 @@ namespace AnotherFlux.Models
         private const uint RomInterleaveOffset = 0x200000;
         private const byte RomTypeExhirom = 0x35;
 
-        private byte[] _rawData;
-        private readonly RomType _romType;
+        private RomType _romType = RomType.Beta;
 
         private bool _expandedRom;
         private bool _patchAllNlz;
@@ -38,6 +41,19 @@ namespace AnotherFlux.Models
         private SaveRecord[] _customData;
         private SaveRecord[] _locationEventsAndDialogue;
         private SaveRecord[] _substrings;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public RomType RomType
+        {
+            get => _romType;
+            private set
+            {
+                if (_romType == value) return;
+                _romType = value;
+                OnPropertyChanged();
+            }
+        }
 
         public static bool IsRomHeadered(FileStream rom)
         {
@@ -68,9 +84,9 @@ namespace AnotherFlux.Models
         {
             using var reader = new BinaryReader(file);
             file.Seek((long)RomAddress.Name, SeekOrigin.Begin);
-            if (reader.ReadChars(RomNameLength).ToString() == RomName) return false;
+            if (Encoding.ASCII.GetString(reader.ReadBytes(RomNameLength)) == RomName) return false;
             file.Seek((long)RomAddress.NameInterleaved, SeekOrigin.Begin);
-            if (reader.ReadChars(RomNameLength).ToString() == RomName) return true;
+            if (Encoding.ASCII.GetString(reader.ReadBytes(RomNameLength)) == RomName) return true;
             throw new RomReadException("Incorrect ROM name");
         }
 
@@ -107,22 +123,22 @@ namespace AnotherFlux.Models
                     throw new RomReadException("Invalid ROM version; v1.0 required");
                 }
                 file.Seek(0L, SeekOrigin.Begin);
-                _rawData = reader.ReadBytes((int)file.Length);
+                GlobalShared.WorkingData = reader.ReadBytes((int)file.Length);
             }
 
-            _romType = _romType switch
+            RomType = (RomType) GlobalShared.WorkingData[(int)RomAddress.Region];
+            if (RomType == RomType.Japan && GlobalShared.WorkingData[0xFF05] == 0xC7) // original TF check, but what's the logic?
             {
-                RomType.Japan when _rawData[0xFF05] == 0xC7 => RomType.Beta, // original TF check, but what's the logic?
-                _ => (RomType) _rawData[(int) RomAddress.Region]
-            };
+                RomType = RomType.Beta; 
+            }
 
-            _expandedRom = _rawData[(int)RomAddress.MapMode] == RomTypeExhirom;
+            _expandedRom = GlobalShared.WorkingData[(int)RomAddress.MapMode] == RomTypeExhirom;
 
             // TODO check if the logic of these tests is not inverted
-            _patchAllNlz = _romType == RomType.Beta || _rawData[GlobalShared.GetRomAddr(RomAddr.NLZPatch)] != 0x64;
-            _patchDactylNlz = _romType == RomType.Beta || _rawData[GlobalShared.GetRomAddr(RomAddr.DactylPatch)] == 0x64;
-            _patchStartLocation = _romType == RomType.Beta || _rawData[0x2E1A] != 0x20;
-            _patchBetaEvents = _romType == RomType.Beta && _rawData[0x372012] != 0xA7;
+            _patchAllNlz = _romType == RomType.Beta || GlobalShared.WorkingData[GlobalShared.GetRomAddr(RomAddr.NLZPatch)] != 0x64;
+            _patchDactylNlz = _romType == RomType.Beta || GlobalShared.WorkingData[GlobalShared.GetRomAddr(RomAddr.DactylPatch)] == 0x64;
+            _patchStartLocation = _romType == RomType.Beta || GlobalShared.WorkingData[0x2E1A] != 0x20;
+            _patchBetaEvents = _romType == RomType.Beta && GlobalShared.WorkingData[0x372012] != 0xA7;
 
             _locationMaps = GetSaveRecords(256, 0x6006, RomAddr.LocMap);
             _locationTileAssemblyL12 = GetSaveRecords(87, 0x1000, RomAddr.LocTileAsmL12);
@@ -260,7 +276,7 @@ namespace AnotherFlux.Models
         private static SaveRecord[] GetSaveRecords(uint length, uint maxSize, RomAddr baseAddr, PointerType pointerType)
             => GetSaveRecords<SaveRecord>(length, maxSize, baseAddr, pointerType);
 
-        public T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr)
+        private static T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr)
             where T : SaveRecord, new() => GetSaveRecords<T>(length, maxSize, baseAddr, false, PointerType.Simple);
 
         private static T[] GetSaveRecords<T>(uint length, uint maxSize, RomAddr baseAddr, bool createEmpty)
@@ -290,6 +306,12 @@ namespace AnotherFlux.Models
                 records[i].Get();
             }
             return records;
+        }
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

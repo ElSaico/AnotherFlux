@@ -1116,23 +1116,19 @@ namespace FluxShared
 		public static PostStatusDel PostStatus;
 		public static GetStrFromGroupDel GetStrFromGroup;
 
-		//public static string KnownAddr(uint nAddr) { }
-
-		//public static uint GetFileOffset(uint[] nData) { }
-
-		public static uint GetFileOffset(int nAddrOffset)
+		public static string KnownAddr(uint nAddr)
 		{
-			return 0;
+			if (((int) nAddr & 0x7E0000) == 0)
+				nAddr |= 0x7E0000;
+			return KnownAddrHash.ContainsKey(nAddr) ? "Mem." + KnownAddrHash[nAddr] : "Mem." + HexStr(nAddr, 6);
 		}
 
-		public static uint GetRomAddr(RomAddr RomAddress)
-		{
-			return 0;
-		}
+		public static uint GetFileOffset(uint[] nData) => SNES.GetFileOffset((uint) (WorkingData[nData[0]] << 16 | WorkingData[nData[1]] << 8) | WorkingData[nData[2]]);
 
-		public static ushort GetRomValue(RomValue RomVal)
-		{
-			return 0;
-		}
+		public static uint GetFileOffset(int nAddrOffset) => SNES.GetFileOffset(GetInt24(WorkingData, nAddrOffset));
+
+		public static uint GetRomAddr(RomAddr RomAddress) => nRomAddr[(int) RomAddress][nRomType];
+
+		public static ushort GetRomValue(RomValue RomVal) => nRomValue[(int) RomVal][nRomType];
 	}
 }

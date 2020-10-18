@@ -13,34 +13,7 @@ namespace AnotherFlux
     {
         public ChronoTriggerRom Rom { get; set; }
 
-        private readonly ButtonMenuItem _fileMenu = new ButtonMenuItem
-        {
-            Text = "&File",
-            Items =
-            {
-                new OpenCommand(),
-                new SaveCommand(),
-                new ButtonMenuItem {Text = "Save as...", Enabled = false},
-                new CheckMenuItem {Text = "Auto-Archive"},
-                new ButtonMenuItem {Text = "Mark All Modified", Enabled = false},
-                new SeparatorMenuItem(),
-                new ButtonMenuItem {Text = "Compression...", Enabled = false},
-                new ButtonMenuItem {Text = "Export...", Enabled = false},
-                new ButtonMenuItem {Text = "Import...", Enabled = false},
-                new ButtonMenuItem
-                {
-                    Text = "Patches",
-                    Items =
-                    {
-                        new ButtonMenuItem {Text = "Expand ROM", Enabled = false},
-                        new ButtonMenuItem {Text = "All Overworlds have a NLZ", Enabled = false},
-                        new ButtonMenuItem {Text = "Dactyl NLZ is not origin based", Enabled = false},
-                        new ButtonMenuItem {Text = "Startup Location", Enabled = false},
-                        new ButtonMenuItem {Text = "Beta Events", Enabled = false}
-                    }
-                }
-            }
-        };
+        private readonly ButtonMenuItem _fileMenu;
         
         private readonly ButtonMenuItem _windowMenu = new ButtonMenuItem
         {
@@ -113,16 +86,6 @@ namespace AnotherFlux
             }
         };
 
-
-        private readonly SaveFileDialog _saveRom = new SaveFileDialog
-        {
-            Filters =
-            {
-                new FileFilter("ROM Files", ".smc", ".sfc"),
-                new FileFilter("All Files", ".*")
-            }
-        };
-
         private void LoadPlugins()
         {
             _plugins = new Plugins().GetPlugins<IFluxPlugin>(EtoEnvironment.GetFolderPath(EtoSpecialFolder.EntryExecutable));
@@ -137,7 +100,36 @@ namespace AnotherFlux
         
         public MainForm()
         {
+            MainFormModel.InitializeGlobalShared();
             Title = "Another Flux";
+            _fileMenu = new ButtonMenuItem
+            {
+                Text = "&File",
+                Items =
+                {
+                    new OpenCommand(this),
+                    new SaveCommand(this),
+                    new ButtonMenuItem {Text = "Save as...", Enabled = false},
+                    new CheckMenuItem {Text = "Auto-Archive"},
+                    new ButtonMenuItem {Text = "Mark All Modified", Enabled = false},
+                    new SeparatorMenuItem(),
+                    new ButtonMenuItem {Text = "Compression...", Enabled = false},
+                    new ButtonMenuItem {Text = "Export...", Enabled = false},
+                    new ButtonMenuItem {Text = "Import...", Enabled = false},
+                    new ButtonMenuItem
+                    {
+                        Text = "Patches",
+                        Items =
+                        {
+                            new ButtonMenuItem {Text = "Expand ROM", Enabled = false},
+                            new ButtonMenuItem {Text = "All Overworlds have a NLZ", Enabled = false},
+                            new ButtonMenuItem {Text = "Dactyl NLZ is not origin based", Enabled = false},
+                            new ButtonMenuItem {Text = "Startup Location", Enabled = false},
+                            new ButtonMenuItem {Text = "Beta Events", Enabled = false}
+                        }
+                    }
+                }
+            };
             ClientSize = new Size(600, 400);
             WindowState = WindowState.Maximized;
             Menu = new MenuBar
