@@ -20,7 +20,7 @@ namespace AnotherFlux.Commands
             MenuText = "&Save";
             ToolBarText = "Save";
             Shortcut = Application.Instance.CommonModifier | Keys.Shift | Keys.S;
-            DataContext = form.Rom;
+            //DataContext = form.Rom;
             this.BindDataContext(c => c.Enabled, (ChronoTriggerRom rom) => rom.RomType != RomType.Beta);
         }
 

@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form
+	xmlns="http://schema.picoe.ca/eto.forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Title="Another Flux"
+	ClientSize="600, 400"
+	WindowState="Maximized"
+	Padding="10"
+	>
+	<StackLayout>
+		<Label>Some Content</Label>
+	</StackLayout>
+
+	<Form.Menu>
+		<MenuBar>
+			<ButtonMenuItem Text="F&amp;ile">
+				<ButtonMenuItem Text="O&amp;pen" Shortcut="CommonModifier+O"/>
+				<ButtonMenuItem Text="S&amp;ave" Shortcut="CommonModifier+S"/>
+				<ButtonMenuItem Text="Save as..." Enabled="False"/>
+				<ButtonMenuItem Text="Auto-Archive"/>
+				<ButtonMenuItem Text="Mark All Modified" Enabled="False"/>
+				<SeparatorMenuItem/>
+				<ButtonMenuItem Text="Compression..." Enabled="False"/>
+				<ButtonMenuItem Text="Export..." Enabled="False"/>
+				<ButtonMenuItem Text="Import..." Enabled="False"/>
+				<ButtonMenuItem Text="Patches">
+					<ButtonMenuItem Text="Expand ROM" Enabled="False"/>
+					<ButtonMenuItem Text="All Overworlds have a NLZ" Enabled="False"/>
+					<ButtonMenuItem Text="Dactyl NLZ is not origin based" Enabled="False"/>
+					<ButtonMenuItem Text="Startup Location" Enabled="False"/>
+					<ButtonMenuItem Text="Beta Events" Enabled="False"/>
+				</ButtonMenuItem>
+			</ButtonMenuItem>
+			<ButtonMenuItem Text="W&amp;indow" Enabled="False">
+				<ButtonMenuItem Text="Locations" Shortcut="CommonModifier+L"/>
+				<ButtonMenuItem Text="Location Events"/>
+				<ButtonMenuItem Text="Overworlds"/>
+				<ButtonMenuItem Text="Overworld Events"/>
+				<ButtonMenuItem Text="Strings"/>
+				<ButtonMenuItem Text="Misc Settings"/>
+				<ButtonMenuItem Text="Custom Data"/>
+				<ButtonMenuItem Text="Translation"/>
+				<SeparatorMenuItem/>
+				<ButtonMenuItem Text="Location">
+					<ButtonMenuItem Text="Properties"/>
+					<ButtonMenuItem Text="Exits"/>
+					<ButtonMenuItem Text="Treasure"/>
+					<ButtonMenuItem Text="Tile Properties"/>
+					<ButtonMenuItem Text="Map Properties"/>
+					<ButtonMenuItem Text="Music"/>
+				</ButtonMenuItem>
+				<ButtonMenuItem Text="Overworld">
+					<ButtonMenuItem Text="Properties"/>
+					<ButtonMenuItem Text="Exits"/>
+					<ButtonMenuItem Text="Tile Properties"/>
+					<ButtonMenuItem Text="Music Transition"/>
+				</ButtonMenuItem>
+				<ButtonMenuItem Text="Tile Swatches">
+					<ButtonMenuItem Text="Layer 1/2 Tiles"/>
+					<ButtonMenuItem Text="Layer 3 Tiles"/>
+					<ButtonMenuItem Text="Layer 1/2 Subtiles"/>
+					<ButtonMenuItem Text="Layer 3 Subtiles"/>
+				</ButtonMenuItem>
+				<SeparatorMenuItem/>
+				<ButtonMenuItem Text="Zoom In" Shortcut="CommonModifier+Insert"/>
+				<ButtonMenuItem Text="Zoom Out" Shortcut="CommonModifier+Delete"/>
+			<!--
+				TODO "Active Window"; Eto doesn't support MDI children yet - https://github.com/picoe/Eto/issues/1408
+				<SeparatorMenuItem/>
+			-->
+			</ButtonMenuItem>
+			<ButtonMenuItem Text="P&amp;lugins" Enabled="False"/>
+			<ButtonMenuItem Text="H&amp;elp">
+				<ButtonMenuItem Text="Manual" Shortcut="F1"/>
+				<ButtonMenuItem Text="Acknowledgements"/>
+			</ButtonMenuItem>
+			<MenuBar.QuitItem>
+				<ButtonMenuItem Text="Exit" Shortcut="CommonModifier+Q" Click="HandleExit" />
+			</MenuBar.QuitItem>
+			<MenuBar.AboutItem>
+				<ButtonMenuItem Text="About..." Click="HandleAbout" />
+			</MenuBar.AboutItem>
+		</MenuBar>
+	</Form.Menu>
+</Form>

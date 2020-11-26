@@ -64,7 +64,7 @@ namespace AnotherFlux.Commands
                     ChronoTriggerRom.DeinterleaveRom(_openRom.FileName);
                     GlobalShared.PostStatus("");
                 }
-                ((MainForm)DataContext).Rom = new ChronoTriggerRom(_openRom.FileName);
+                //((MainForm)DataContext).Rom = new ChronoTriggerRom(_openRom.FileName);
             }
             catch (RomReadException ex)
             {
