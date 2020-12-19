@@ -1104,15 +1104,15 @@ namespace FluxShared
 			"Aqua",
 			"White"
 		};
-		public static List<uint[]> nRomAddr = new List<uint[]>(new uint[46][]);
-		public static List<ushort[]> nRomValue = new List<ushort[]>(new ushort[46][]);
+		public static List<uint[]> nRomAddr;
+		public static List<ushort[]> nRomValue;
 		public static byte nRomType = 1;
 		public static byte[] WorkingData;
 		public static cFreeSpace FreeSpace;
 		public static byte nZoomFactor = 1;
 		//public static DockPanel DockMan;
 		//public static StatusBarPanel CoordStatus;
-		public static Dictionary<uint, string> KnownAddrHash = new Dictionary<uint, string>();
+		public static Dictionary<uint, string> KnownAddrHash;
 		public static PostStatusDel PostStatus;
 		public static GetStrFromGroupDel GetStrFromGroup;
 
@@ -1120,12 +1120,12 @@ namespace FluxShared
 		{
 			if (((int) nAddr & 0x7E0000) == 0)
 				nAddr |= 0x7E0000;
-			return KnownAddrHash.ContainsKey(nAddr) ? "Mem." + KnownAddrHash[nAddr] : "Mem." + HexStr(nAddr, 6);
+			return "Mem." + KnownAddrHash.GetValueOrDefault(nAddr, HexStr(nAddr, 6));
 		}
 
-		public static uint GetFileOffset(uint[] nData) => SNES.GetFileOffset((uint) (WorkingData[nData[0]] << 16 | WorkingData[nData[1]] << 8) | WorkingData[nData[2]]);
+		public static uint GetFileOffset(uint[] nData) => GetFileOffset((uint) (WorkingData[nData[0]] << 16 | WorkingData[nData[1]] << 8) | WorkingData[nData[2]]);
 
-		public static uint GetFileOffset(int nAddrOffset) => SNES.GetFileOffset(GetInt24(WorkingData, nAddrOffset));
+		public static uint GetFileOffset(int nAddrOffset) => GetFileOffset(GetInt24(WorkingData, nAddrOffset));
 
 		public static uint GetRomAddr(RomAddr RomAddress) => nRomAddr[(int) RomAddress][nRomType];
 

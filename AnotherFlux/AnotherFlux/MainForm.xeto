@@ -2,20 +2,20 @@
 <Form
 	xmlns="http://schema.picoe.ca/eto.forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	Title="Another Flux"
-	ClientSize="600, 400"
-	WindowState="Maximized"
-	Padding="10"
-	>
+	xmlns:com="clr-namespace:AnotherFlux.Commands"
+	xmlns:mod="clr-namespace:AnotherFlux.Models"
+	Title="Another Flux" ClientSize="600, 400" WindowState="Maximized">
 	<StackLayout>
 		<Label>Some Content</Label>
 	</StackLayout>
-
+	<Form.DataContext>
+		<mod:MainFormModel/>
+	</Form.DataContext>
 	<Form.Menu>
 		<MenuBar>
-			<ButtonMenuItem Text="F&amp;ile">
-				<ButtonMenuItem Text="O&amp;pen" Shortcut="CommonModifier+O"/>
-				<ButtonMenuItem Text="S&amp;ave" Shortcut="CommonModifier+S"/>
+			<ButtonMenuItem Text="&amp;File">
+				<com:OpenCommand MenuText="&amp;Open" Shortcut="CommonModifier+O" DataContext="{Binding Rom}"/>
+				<com:SaveCommand MenuText="&amp;Save" Shortcut="CommonModifier+Shift+S" DataContext="{Binding Rom}"/>
 				<ButtonMenuItem Text="Save as..." Enabled="False"/>
 				<ButtonMenuItem Text="Auto-Archive"/>
 				<ButtonMenuItem Text="Mark All Modified" Enabled="False"/>
@@ -31,8 +31,8 @@
 					<ButtonMenuItem Text="Beta Events" Enabled="False"/>
 				</ButtonMenuItem>
 			</ButtonMenuItem>
-			<ButtonMenuItem Text="W&amp;indow" Enabled="False">
-				<ButtonMenuItem Text="Locations" Shortcut="CommonModifier+L"/>
+			<ButtonMenuItem Text="&amp;Window" Enabled="False">
+				<ButtonMenuItem Text="&amp;Locations"/>
 				<ButtonMenuItem Text="Location Events"/>
 				<ButtonMenuItem Text="Overworlds"/>
 				<ButtonMenuItem Text="Overworld Events"/>
@@ -69,8 +69,8 @@
 				<SeparatorMenuItem/>
 			-->
 			</ButtonMenuItem>
-			<ButtonMenuItem Text="P&amp;lugins" Enabled="False"/>
-			<ButtonMenuItem Text="H&amp;elp">
+			<ButtonMenuItem Text="&amp;Plugins" Enabled="False"/>
+			<ButtonMenuItem Text="&amp;Help">
 				<ButtonMenuItem Text="Manual" Shortcut="F1"/>
 				<ButtonMenuItem Text="Acknowledgements"/>
 			</ButtonMenuItem>

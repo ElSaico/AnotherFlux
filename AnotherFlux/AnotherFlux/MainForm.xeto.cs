@@ -10,7 +10,6 @@ namespace AnotherFlux
 		public MainForm()
 		{
 			XamlReader.Load(this);
-			MainFormModel.InitializeGlobalShared();
 		}
 
 		protected void HandleAbout(object sender, EventArgs e)
